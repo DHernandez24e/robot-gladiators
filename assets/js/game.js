@@ -27,11 +27,16 @@ var fightOrSkip = function() {
 }
 
 var fight = function(enemy) {
+    var isPlayerTurn = true;
+    if (Math.random() > .5) {
+        isPlayerTurn = false;
+    }
 
     while(enemy.health > 0 && playerInfo.health > 0) {
-        if (fightOrSkip()) {
-            break;
-        }
+        if (isPlayerTurn) {
+            if (fightOrSkip()) {
+                break;
+            }
 
     //Subtract the value of 'playerInfo.attack' from the value of 'enemy.health' and use that result to update the value in the 'enemy.health' variable
     var damage = randomNumber(playerInfo.attack - 3, playerInfo.attack);
@@ -51,7 +56,7 @@ var fight = function(enemy) {
     } else {
         window.alert(enemy.name + " still has " + enemy.health + " health left.");
     }
-
+} else {
     var damage = randomNumber(enemy.attack - 3, enemy.attack);
 
     playerInfo.health = Math.max(0, playerInfo.health - damage);
@@ -65,7 +70,9 @@ var fight = function(enemy) {
     } else {
         window.alert(playerInfo.name + " still has " + playerInfo.health + " health left.");
     }
-}
+    }
+    isPlayerTurn = !isPlayerTurn;
+    }
 };
 
 var randomNumber = function(min, max) {
