@@ -4,14 +4,15 @@
 //      *Defeat each enemy robot
 // "LOSE" - Player robot's health is zero or less
 
-var fight = function(enemy) {
-
-    while(enemy.health > 0 && playerInfo.health > 0) {
-    //window.alert("Welcome to Robot Gladiators!");
-
+var fightOrSkip = function() {
     var promptFight = window.prompt("Would you like to FIGHT or SKIP this battle? Enter 'FIGHT' or 'SKIP' to choose.");
 
-    if (promptFight === "skip" || promptFight === "SKIP") {
+    if (promptFight === "" || promptFight === null) {
+        window.alert("You need to provide a valid answer! Please try again.");
+        return fightOrSkip();
+    }
+    promptFight = promptFight.toLowerCase();
+    if (promptFight === "skip") {
         var confirmSkip = window.confirm("Are you sure you'd like to quit?");
     
         //if yes (true), leave fight
@@ -19,10 +20,18 @@ var fight = function(enemy) {
             window.alert(playerInfo.name + " has decided to skip this fight. Goodbye!");
             //subtract money from playerInfo.money for skipping
             playerInfo.money = Math.max(0, playerInfo.money - 10);
-            console.log("playerInfo.money", playerInfo.money);
-            break;
+            return true;    
         }
     }
+    return false;
+}
+
+var fight = function(enemy) {
+
+    while(enemy.health > 0 && playerInfo.health > 0) {
+        if (fightOrSkip()) {
+            break;
+        }
 
     //Subtract the value of 'playerInfo.attack' from the value of 'enemy.health' and use that result to update the value in the 'enemy.health' variable
     var damage = randomNumber(playerInfo.attack - 3, playerInfo.attack);
